@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-2zxWfKHNZ3zmSmSMP0vChwTsNGQ+OzzBrdp2KV3TPRE='; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https://lezpksqmayjotljmsqdz.supabase.co/functions/v1/share-preview; connect-src https://lezpksqmayjotljmsqdz.supabase.co; base-uri 'none'; form-action 'none'">
+<title>בריקס</title>
+<meta name="description" content="בריקס: שוק קהילתי לסטים יד שנייה">
+<meta property="og:title" content="בריקס">
+<meta property="og:description" content="שוק קהילתי לסטים יד שנייה">
+<meta property="og:image" content="https://bricks-app.com/favicon.png">
+<meta name="robots" content="noindex">
+<link rel="icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root { --cream: #FBF6EC; --ink: #1B1B1F; --muted: #6F6A60; --edge: #4A4A52; --grey: #E7E2D6; --hint: #FFF7DD; }
+* { box-sizing: border-box; }
+body { margin: 0; background: #fff; color: var(--ink); font: 16px/1.5 Heebo, Arial, sans-serif; }
+main { max-width: 480px; margin: 0 auto; padding: 24px 16px 40px; display: flex; flex-direction: column; gap: 14px; }
+.logo { display: flex; align-items: center; gap: 8px; font-weight: 900; font-size: 18px; color: var(--ink); text-decoration: none; }
+.logo img { width: 32px; height: 32px; border-radius: 8px; }
+.img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border: 2px solid var(--edge); border-radius: 12px; background: var(--grey); display: block; }
+.thumbs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.thumbs .img { border-radius: 8px; }
+h1 { font-weight: 900; font-size: 22px; line-height: 1.3; margin: 0; overflow-wrap: anywhere; }
+.code { color: var(--muted); font-weight: 500; font-size: 13px; margin: 2px 0 0; }
+.price { font-weight: 900; font-size: 26px; line-height: 1.2; margin: 0; }
+.muted { color: var(--muted); margin: 0; }
+.cap { color: var(--muted); font-size: 13px; line-height: 1.5; margin: 0; }
+.play { min-height: 52px; border-radius: 12px; background: var(--ink); color: #fff; display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: 800; font-size: 16px; border: 2px solid var(--edge); box-shadow: 0 3px 0 var(--edge); text-decoration: none; }
+.play::before { content: ""; border-style: solid; border-width: 9px 0 9px 15px; border-color: transparent transparent transparent #34A853; }
+.box { background: var(--hint); border: 2px solid var(--edge); border-radius: 16px; padding: 16px; }
+.box b { display: block; }
+.ltr { direction: ltr; unicode-bidi: isolate; }
+a.retry { color: #005AD2; font-weight: 700; }
+</style>
+</head>
+<body>
+<main id="page">
+<a class="logo" href="/"><img src="/favicon.png" alt="">בריקס</a>
+<p class="muted" id="status">טוען…</p>
+</main>
+<script>
+{
+  const TEXT = {"loading":"טוען…","listingGone":"המודעה כבר לא זמינה","listingGoneBody":"אולי נמכרה או הוסרה. יש עוד הרבה סטים בבריקס.","shopGone":"החנות לא זמינה","shopGoneBody":"יש עוד הרבה סטים בבריקס.","failed":"לא הצלחנו לטעון את הדף.","busy":"יש עומס כרגע. נסו שוב בעוד דקה.","retry":"לנסות שוב","auction":"מכירה פומבית","shopTitle":"החנות של {name}","count":"{count} מודעות פעילות","countOne":"מודעה פעילה אחת","play":"להורדה מ-Google Play","hasApp":"כבר יש לך את בריקס? הקישור נפתח בה. כדי לקנות, להציע או לכתוב למוכר צריך להתחבר באפליקציה.","testingTitle":"בריקס בבדיקה סגורה ב-Google Play","testingBody":"בקרוב לכולם. להצטרפות לבדיקה: ","support":"support@bricks-app.com"};
+  const THEMES = {"city":"סיטי","star-wars":"סטאר וורס","technic":"טכניק","ninjago":"נינג'גו","creator":"קריאייטור","icons":"אייקונס","architecture":"ארכיטקטורה","ideas":"איידיאז","harry-potter":"הארי פוטר","marvel":"מארוול","dc":"DC","disney":"דיסני","friends":"פרנדס","duplo":"דופלו","minecraft":"מיינקראפט","speed-champions":"ספיד צ׳מפיונס","jurassic-world":"עולם היורה","super-mario":"סופר מריו","classic":"קלאסיק","minifigures":"מיניפיגורות","other":"אחר","botanical":"בוטניקה","art":"אמנות","lotr":"שר הטבעות","castle":"טירות ואבירים","pirates":"פיראטים","space":"חלל","trains":"רכבות","seasonal":"חגים ועונות","brickheadz":"בריקהדז","dreamzzz":"דרימז","avatar":"אווטאר","gaming":"גיימינג","robotics":"רובוטיקה","mixed":"מעורב"};
+  const PLAY_PUBLIC = false;
+  const PLAY_URL = "https://play.google.com/store/apps/details?id=com.galka.bricks";
+  const PREVIEW_URL = "https://lezpksqmayjotljmsqdz.supabase.co/functions/v1/share-preview";
+  const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+  const page = document.getElementById('page');
+  const status = document.getElementById('status');
+  const price = new Intl.NumberFormat('he-IL', { style: 'currency', currency: 'ILS', maximumFractionDigits: 0 });
+
+  // Everything from the server is text (textContent), and an image only from our own bucket.
+  const el = (tag, cls, text) => {
+    const node = document.createElement(tag);
+    if (cls) node.className = cls;
+    if (text != null) node.textContent = String(text);
+    return node;
+  };
+  // A photo comes through the function by listing id (never a storage path, which names the seller).
+  const image = (listingId) => {
+    const node = el('img', 'img');
+    node.alt = '';
+    if (typeof listingId === 'string' && UUID.test(listingId)) node.src = PREVIEW_URL + '?i=' + listingId;
+    return node;
+  };
+  const getApp = () => {
+    if (PLAY_PUBLIC) {
+      const link = el('a', 'play', TEXT.play);
+      link.href = PLAY_URL;
+      return link;
+    }
+    const box = el('div', 'box');
+    const body = el('span', 'muted', TEXT.testingBody);
+    body.append(el('bdi', null, TEXT.support));
+    box.append(el('b', null, TEXT.testingTitle), body);
+    return box;
+  };
+  const show = (...nodes) => {
+    status.remove();
+    page.append(...nodes);
+  };
+
+  const [, kind, id, extra] = location.pathname.split('/');
+  if ((kind !== 'l' && kind !== 's') || !UUID.test(id || '') || extra) {
+    location.replace('/');
+  } else {
+    fetch(PREVIEW_URL + '?' + kind + '=' + id)
+      .then((response) => {
+        if (response.status === 404) return null;
+        if (response.status === 429) throw new Error('busy');
+        if (!response.ok) throw new Error('failed');
+        return response.json();
+      })
+      .then((data) => {
+        if (!data) {
+          const shop = kind === 's';
+          show(el('h1', null, shop ? TEXT.shopGone : TEXT.listingGone), el('p', 'muted', shop ? TEXT.shopGoneBody : TEXT.listingGoneBody), getApp());
+          return;
+        }
+        if (data.kind === 'listing') {
+          document.title = String(data.title) + ' · בריקס';
+          const head = el('div');
+          // Set names are often Latin: isolated inside the right-aligned heading.
+          const title = el('h1');
+          title.append(el('bdi', null, data.title));
+          head.append(title);
+          const meta = [data.code, THEMES[data.theme]].filter(Boolean).join(' · ');
+          if (meta) head.append(el('p', 'code', meta));
+          const cost = data.auction ? TEXT.auction : typeof data.price === 'number' ? price.format(data.price) : '';
+          show(image(data.image === true ? id : null), head, el('p', 'price', cost), getApp(), el('p', 'cap', TEXT.hasApp));
+          return;
+        }
+        const name = TEXT.shopTitle.replace('{name}', () => String(data.name));
+        document.title = name + ' · בריקס';
+        const thumbs = el('div', 'thumbs');
+        (Array.isArray(data.listings) ? data.listings : []).slice(0, 3).forEach((listingId) => thumbs.append(image(listingId)));
+        const count = Number(data.count) === 1 ? TEXT.countOne : TEXT.count.replace('{count}', String(Number(data.count) || 0));
+        const heading = el('h1');
+        heading.append(TEXT.shopTitle.split('{name}')[0], el('bdi', null, String(data.name)), TEXT.shopTitle.split('{name}')[1] || '');
+        show(heading, el('p', 'muted', count), thumbs, getApp(), el('p', 'cap', TEXT.hasApp));
+      })
+      .catch((cause) => {
+        const retry = el('a', 'retry', TEXT.retry);
+        retry.href = location.pathname;
+        show(el('p', 'muted', cause && cause.message === 'busy' ? TEXT.busy : TEXT.failed), retry);
+      });
+  }
+}
+</script>
+</body>
+</html>
